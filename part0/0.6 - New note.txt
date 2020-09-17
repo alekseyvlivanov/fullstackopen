@@ -1,0 +1,15 @@
+title 0.6: New note
+
+note over Browser:
+The event handler creates a new note,
+adds it to the notes list,
+rerenders the note list on the page
+and sends the new note to the server
+end note
+
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note right of Browser:
+Request Payload {content: "another text", date: "2020-09-17T12:51:15.370Z"}
+end note
+
+Server-->Browser: Response Status Code 201
