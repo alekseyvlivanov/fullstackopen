@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Header from './Header';
+import Content from './Content';
+import Total from './Total';
+
 const App = () => {
   const course = 'Half Stack application development';
   const part1 = 'Fundamentals of React';
@@ -10,19 +14,19 @@ const App = () => {
   const part3 = 'State of a component';
   const exercises3 = 14;
 
+  const parts = [part1, part2, part3];
+  const exercises = [exercises1, exercises2, exercises3];
+
+  const content = Object.fromEntries(
+    parts.map((_, idx) => [parts[idx], exercises[idx]]),
+  );
+  const total = exercises.reduce((acc, curr) => acc + curr, 0);
+
   return (
     <div>
-      <h1>{course}</h1>
-      <p>
-        {part1} {exercises1}
-      </p>
-      <p>
-        {part2} {exercises2}
-      </p>
-      <p>
-        {part3} {exercises3}
-      </p>
-      <p>Number of exercises {exercises1 + exercises2 + exercises3}</p>
+      <Header header={course} />
+      <Content content={content} />
+      <Total total={total} />
     </div>
   );
 };
