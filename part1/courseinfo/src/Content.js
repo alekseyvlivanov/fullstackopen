@@ -6,8 +6,8 @@ const Content = (props) => {
   const { content } = props;
   return (
     <div>
-      {Object.entries(content).map(([part, exercises], idx) => (
-        <Part key={idx} part={part} exercises={exercises} />
+      {content.map(({ name, exercises }, idx) => (
+        <Part key={idx} name={name} exercises={exercises} />
       ))}
     </div>
   );
