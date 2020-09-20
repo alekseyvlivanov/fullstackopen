@@ -1,11 +1,11 @@
 import React from 'react';
 
+import Button from './Button';
+
 const Buttons = (props) => {
   const { feedback, handleClick } = props;
   return Object.keys(feedback).map((mark) => (
-    <button key={mark} onClick={handleClick(mark)}>
-      {mark}
-    </button>
+    <Button key={mark} mark={mark} onClick={handleClick} />
   ));
 };
 
