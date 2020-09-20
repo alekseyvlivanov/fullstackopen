@@ -3,10 +3,22 @@ import ReactDOM from 'react-dom';
 
 const rand = (from, to) => Math.floor(Math.random() * (to - from + 1)) + from;
 
+const Header = ({ header }) => <h2>{header}</h2>;
+
+const Anecdote = ({ text, votes }) => {
+  return (
+    <>
+      <div>{text}</div>
+      <div>has {votes} votes</div>
+    </>
+  );
+};
+
 const App = (props) => {
   const { anecdotes } = props;
   const length = anecdotes.length;
 
+  const [maxSelected, setMaxSelected] = useState(0);
   const [selected, setSelected] = useState(rand(0, length - 1));
   const [votes, setVotes] = useState(new Array(length).fill(0));
 
@@ -18,14 +30,19 @@ const App = (props) => {
     const newVotes = [...votes];
     newVotes[selected] += 1;
     setVotes(newVotes);
+    if (newVotes[selected] > newVotes[maxSelected]) {
+      setMaxSelected(selected);
+    }
   };
 
   return (
     <>
-      <div>{anecdotes[selected]}</div>
-      <div>has {votes[selected]} votes</div>
+      <Header header="Anecdote of the day" />
+      <Anecdote text={anecdotes[selected]} votes={votes[selected]} />
       <button onClick={handleVote}>Vote</button>
       <button onClick={handleNext}>Next anecdote</button>
+      <Header header="Anecdote with most votes" />
+      <Anecdote text={anecdotes[maxSelected]} votes={votes[maxSelected]} />
     </>
   );
 };
