@@ -15,14 +15,16 @@ const Statistics = (props) => {
   const positive = (good * 100) / all;
 
   return (
-    <>
-      {Object.keys(feedback).map((mark) => (
-        <Statistic key={mark} text={mark} value={feedback[mark]} />
-      ))}
-      <Statistic text="all" value={all} />
-      <Statistic text="average" value={average} />
-      <Statistic text="positive" value={positive} suffix="%" />
-    </>
+    <table>
+      <tbody>
+        {Object.keys(feedback).map((mark) => (
+          <Statistic key={mark} text={mark} value={feedback[mark]} />
+        ))}
+        <Statistic text="all" value={all} />
+        <Statistic text="average" value={average} />
+        <Statistic text="positive" value={positive} suffix="%" />
+      </tbody>
+    </table>
   );
 };
 
