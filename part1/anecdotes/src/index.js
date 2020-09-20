@@ -5,15 +5,27 @@ const rand = (from, to) => Math.floor(Math.random() * (to - from + 1)) + from;
 
 const App = (props) => {
   const { anecdotes } = props;
+  const length = anecdotes.length;
 
-  const [selected, setSelected] = useState(rand(0, anecdotes.length - 1));
+  const [selected, setSelected] = useState(rand(0, length - 1));
+  const [votes, setVotes] = useState(new Array(length).fill(0));
 
-  const handleClick = () => setSelected(rand(0, anecdotes.length - 1));
+  const handleNext = () => {
+    setSelected(rand(0, length - 1));
+  };
+
+  const handleVote = () => {
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+  };
 
   return (
     <>
       <div>{anecdotes[selected]}</div>
-      <button onClick={handleClick}>Next anecdote</button>
+      <div>has {votes[selected]} votes</div>
+      <button onClick={handleVote}>Vote</button>
+      <button onClick={handleNext}>Next anecdote</button>
     </>
   );
 };
