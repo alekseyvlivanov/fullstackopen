@@ -58,7 +58,7 @@ const App = () => {
     <>
       <Title title={title} />
       {courses.map((course) => (
-        <Course course={course} />
+        <Course key={course.id} course={course} />
       ))}
     </>
   );
