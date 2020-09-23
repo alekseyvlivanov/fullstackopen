@@ -5,13 +5,13 @@ const Header = ({ course }) => {
   return <h1>{course.name}</h1>;
 };
 
-const Total = ({ course }) => {
-  const sum =
-    course.parts[0].exercises +
-    course.parts[1].exercises +
-    course.parts[2].exercises;
-  return <p>Number of exercises {sum}</p>;
-};
+// const Total = ({ course }) => {
+//   const sum =
+//     course.parts[0].exercises +
+//     course.parts[1].exercises +
+//     course.parts[2].exercises;
+//   return <p>Number of exercises {sum}</p>;
+// };
 
 const Part = (props) => {
   return (
@@ -21,13 +21,17 @@ const Part = (props) => {
   );
 };
 
-const Content = ({ course }) => {
+const Content = ({ course: { parts } }) => {
+  return parts.map((part) => <Part part={part} />);
+};
+
+const Course = ({ course }) => {
   return (
-    <div>
-      <Part part={course.parts[0]} />
-      <Part part={course.parts[1]} />
-      <Part part={course.parts[2]} />
-    </div>
+    <>
+      <Header course={course} />
+      <Content course={course} />
+      {/* <Total course={course} /> */}
+    </>
   );
 };
 
@@ -54,13 +58,7 @@ const App = () => {
     ],
   };
 
-  return (
-    <div>
-      <Header course={course} />
-      <Content course={course} />
-      <Total course={course} />
-    </div>
-  );
+  return <Course course={course} />;
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
