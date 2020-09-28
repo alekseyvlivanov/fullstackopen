@@ -95,6 +95,13 @@ const App = () => {
               type: 'success',
             });
             setTimeout(() => setMessage({}), 2000);
+          })
+          .catch(() => {
+            setMessage({
+              text: `Already deleted ${oldPerson.name}`,
+              type: 'error',
+            });
+            setTimeout(() => setMessage({}), 2000);
           });
       }
     } else {
@@ -120,7 +127,16 @@ const App = () => {
     if (window.confirm(`Delete ${name}?`)) {
       personService
         .deletePerson(id)
-        .then(() => setPersons(persons.filter((p) => p.id !== id)));
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== id));
+          setMessage({ text: `Deleted ${name}`, type: 'success' });
+          setTimeout(() => setMessage({}), 2000);
+        })
+        .catch(() => {
+          setMessage({ text: `Already deleted ${name}`, type: 'error' });
+          setTimeout(() => setMessage({}), 2000);
+          setPersons(persons.filter((p) => p.id !== id));
+        });
     }
   };
 
