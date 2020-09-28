@@ -14,7 +14,11 @@ const App = () => {
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [, setFilterName] = useState('');
 
-  const renderCounties = () => {
+  const handleClick = (country) => () => {
+    setFilteredCountries([country]);
+  };
+
+  const renderCountries = () => {
     if (filteredCountries.length === 0) {
       return null;
     }
@@ -24,7 +28,11 @@ const App = () => {
     }
 
     if (filteredCountries.length > 1) {
-      return filteredCountries.map((c) => <div key={c.name}>{c.name}</div>);
+      return filteredCountries.map((c) => (
+        <div key={c.name}>
+          {c.name} <button onClick={handleClick(c)}>show</button>
+        </div>
+      ));
     }
 
     const { name, capital, population, languages, flag } = filteredCountries[0];
@@ -66,7 +74,7 @@ const App = () => {
   return (
     <div>
       <Filter handleFilter={handleFilter} />
-      {renderCounties()}
+      {renderCountries()}
     </div>
   );
 };
