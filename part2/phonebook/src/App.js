@@ -2,6 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 import personService from './services/persons';
 
+import './index.css';
+
+const Notification = ({ message: { text, type } }) => {
+  if (!text || !type) {
+    return null;
+  }
+
+  return <div className={type}>{text}</div>;
+};
+
 const Filter = ({ handleFilter }) => {
   return (
     <div>
@@ -52,6 +62,7 @@ const App = () => {
   const [filterName, setFilterName] = useState('');
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [message, setMessage] = useState({});
 
   const handleFilter = ({ target: { value } }) => {
     setFilterName(value);
@@ -79,6 +90,11 @@ const App = () => {
             );
             setNewName('');
             setNewNumber('');
+            setMessage({
+              text: `Updated ${returnedPerson.name}`,
+              type: 'success',
+            });
+            setTimeout(() => setMessage({}), 2000);
           });
       }
     } else {
@@ -86,6 +102,8 @@ const App = () => {
         setPersons([...persons, person]);
         setNewName('');
         setNewNumber('');
+        setMessage({ text: `Added ${person.name}`, type: 'success' });
+        setTimeout(() => setMessage({}), 2000);
       });
     }
   };
@@ -122,6 +140,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter handleFilter={handleFilter} />
       <h3>Add a new</h3>
       <PersonForm
