@@ -60,18 +60,34 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
-      return;
-    }
+    const newPerson = { name: newName, number: newNumber };
+    const oldPerson = persons.find((person) => person.name === newName);
 
-    personService
-      .createPerson({ name: newName, number: newNumber })
-      .then((newPerson) => {
-        setPersons([...persons, newPerson]);
+    if (oldPerson) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`,
+        )
+      ) {
+        personService
+          .updatePerson(oldPerson.id, newPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== oldPerson.id ? person : returnedPerson,
+              ),
+            );
+            setNewName('');
+            setNewNumber('');
+          });
+      }
+    } else {
+      personService.createPerson(newPerson).then((person) => {
+        setPersons([...persons, person]);
         setNewName('');
         setNewNumber('');
       });
+    }
   };
 
   const handleName = ({ target: { value } }) => {
