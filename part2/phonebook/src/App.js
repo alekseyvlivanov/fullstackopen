@@ -13,8 +13,8 @@ const Filter = ({ handleFilter }) => {
 const PersonForm = ({
   handleSubmit,
   handleName,
-  newName,
   handleNumber,
+  newName,
   newNumber,
 }) => {
   return (
@@ -32,16 +32,19 @@ const PersonForm = ({
   );
 };
 
-const Person = ({ person }) => {
+const Person = ({ person, handleDelete }) => {
   return (
     <p>
-      {person.name} {person.number}
+      {person.name} {person.number}{' '}
+      <button onClick={handleDelete(person.id, person.name)}>delete</button>
     </p>
   );
 };
 
-const Persons = ({ persons }) => {
-  return persons.map((person) => <Person key={person.name} person={person} />);
+const Persons = ({ persons, handleDelete }) => {
+  return persons.map((person) => (
+    <Person key={person.name} person={person} handleDelete={handleDelete} />
+  ));
 };
 
 const App = () => {
@@ -63,7 +66,7 @@ const App = () => {
     }
 
     personService
-      .create({ name: newName, number: newNumber })
+      .createPerson({ name: newName, number: newNumber })
       .then((newPerson) => {
         setPersons([...persons, newPerson]);
         setNewName('');
@@ -79,6 +82,14 @@ const App = () => {
     setNewNumber(value);
   };
 
+  const handleDelete = (id, name) => () => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personService
+        .deletePerson(id)
+        .then(() => setPersons(persons.filter((p) => p.id !== id)));
+    }
+  };
+
   const personsToShow =
     filterName.trim() === ''
       ? persons
@@ -87,7 +98,7 @@ const App = () => {
         );
 
   const getPersons = () => {
-    personService.getAll().then((allPersons) => setPersons(allPersons));
+    personService.getPersons().then((allPersons) => setPersons(allPersons));
   };
 
   useEffect(getPersons, []);
@@ -100,12 +111,12 @@ const App = () => {
       <PersonForm
         handleSubmit={handleSubmit}
         handleName={handleName}
-        newName={newName}
         handleNumber={handleNumber}
+        newName={newName}
         newNumber={newNumber}
       />
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} handleDelete={handleDelete} />
     </div>
   );
 };
