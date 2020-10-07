@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import personService from './services/persons';
+import personService from "./services/persons";
 
-import './index.css';
+import "./index.css";
 
 const Notification = ({ message: { text, type } }) => {
   if (!text || !type) {
@@ -45,7 +45,7 @@ const PersonForm = ({
 const Person = ({ person, handleDelete }) => {
   return (
     <p>
-      {person.name} {person.number}{' '}
+      {person.name} {person.number}{" "}
       <button onClick={handleDelete(person.id, person.name)}>delete</button>
     </p>
   );
@@ -59,9 +59,9 @@ const Persons = ({ persons, handleDelete }) => {
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [filterName, setFilterName] = useState('');
-  const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('');
+  const [filterName, setFilterName] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [message, setMessage] = useState({});
 
   const handleFilter = ({ target: { value } }) => {
@@ -77,7 +77,7 @@ const App = () => {
     if (oldPerson) {
       if (
         window.confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one?`,
+          `${newName} is already added to phonebook, replace the old number with a new one?`
         )
       ) {
         personService
@@ -85,33 +85,36 @@ const App = () => {
           .then((returnedPerson) => {
             setPersons(
               persons.map((person) =>
-                person.id !== oldPerson.id ? person : returnedPerson,
-              ),
+                person.id !== oldPerson.id ? person : returnedPerson
+              )
             );
-            setNewName('');
-            setNewNumber('');
+            setNewName("");
+            setNewNumber("");
             setMessage({
               text: `Updated ${returnedPerson.name}`,
-              type: 'success',
+              type: "success",
             });
             setTimeout(() => setMessage({}), 2000);
           })
-          .catch(() => {
-            setMessage({
-              text: `Already deleted ${oldPerson.name}`,
-              type: 'error',
-            });
+          .catch((err) => {
+            setMessage({ text: err.response.data.error, type: "error" });
             setTimeout(() => setMessage({}), 2000);
           });
       }
     } else {
-      personService.createPerson(newPerson).then((person) => {
-        setPersons([...persons, person]);
-        setNewName('');
-        setNewNumber('');
-        setMessage({ text: `Added ${person.name}`, type: 'success' });
-        setTimeout(() => setMessage({}), 2000);
-      });
+      personService
+        .createPerson(newPerson)
+        .then((person) => {
+          setPersons([...persons, person]);
+          setNewName("");
+          setNewNumber("");
+          setMessage({ text: `Added ${person.name}`, type: "success" });
+          setTimeout(() => setMessage({}), 2000);
+        })
+        .catch((err) => {
+          setMessage({ text: err.response.data.error, type: "error" });
+          setTimeout(() => setMessage({}), 2000);
+        });
     }
   };
 
@@ -129,22 +132,21 @@ const App = () => {
         .deletePerson(id)
         .then(() => {
           setPersons(persons.filter((p) => p.id !== id));
-          setMessage({ text: `Deleted ${name}`, type: 'success' });
+          setMessage({ text: `Deleted ${name}`, type: "success" });
           setTimeout(() => setMessage({}), 2000);
         })
-        .catch(() => {
-          setMessage({ text: `Already deleted ${name}`, type: 'error' });
+        .catch((err) => {
+          setMessage({ text: err.response.data.error, type: "error" });
           setTimeout(() => setMessage({}), 2000);
-          setPersons(persons.filter((p) => p.id !== id));
         });
     }
   };
 
   const personsToShow =
-    filterName.trim() === ''
+    filterName.trim() === ""
       ? persons
       : persons.filter(({ name }) =>
-          name.trim().toLowerCase().includes(filterName.trim().toLowerCase()),
+          name.trim().toLowerCase().includes(filterName.trim().toLowerCase())
         );
 
   const getPersons = () => {
